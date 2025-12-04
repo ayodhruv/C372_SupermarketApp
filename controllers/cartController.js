@@ -2,6 +2,7 @@
 const CartItem = require('../models/CartItem');
 const Product = require('../models/Product');
 const notificationController = require('./notificationController');
+const orderController = require('./orderController');
 
 exports.addToCart = (req, res) => {
   const productId = parseInt(req.params.id);
@@ -135,6 +136,17 @@ exports.checkout = (req, res) => {
             title: 'Invoice available',
             message: `Invoice for ${orderId} is ready.`,
             link: '/checkout'
+          });
+
+          // Save order history in session (per-user, not shared)
+          if (!Array.isArray(req.session.orders)) {
+            req.session.orders = [];
+          }
+          req.session.orders.unshift({
+            orderId,
+            total,
+            items,
+            timestamp: orderTimestamp
           });
 
           res.render('checkout', {

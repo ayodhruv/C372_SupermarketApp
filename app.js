@@ -6,6 +6,7 @@ const userController = require('./controllers/userController');
 const productController = require('./controllers/productController');
 const cartController = require('./controllers/cartController');
 const notificationController = require('./controllers/notificationController');
+const orderController = require('./controllers/orderController');
 
 const app = express();
 
@@ -67,6 +68,9 @@ app.get('/inventory', checkAuthenticated, checkAdmin, productController.showInve
 // Notifications
 app.get('/notifications', checkAuthenticated, notificationController.listNotifications);
 app.post('/notifications/mark-read', checkAuthenticated, notificationController.markAllRead);
+
+// Orders
+app.get('/orders', checkAuthenticated, orderController.listOrders);
 
 // Admin user management
 app.get('/users', checkAuthenticated, checkAdmin, userController.listUsers);
